@@ -1,0 +1,10 @@
+# github.com/konsorten/go-windows-terminal-sequences v1.0.2
+github.com/konsorten/go-windows-terminal-sequences
+# github.com/oracle/oci-go-sdk v5.4.0+incompatible
+github.com/oracle/oci-go-sdk/common/auth
+github.com/oracle/oci-go-sdk/objectstorage
+github.com/oracle/oci-go-sdk/common
+# github.com/sirupsen/logrus v1.4.1
+github.com/sirupsen/logrus
+# golang.org/x/sys v0.0.0-20190419153524-e8e3143a4f4a
+golang.org/x/sys/unix

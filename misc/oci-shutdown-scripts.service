@@ -1,0 +1,15 @@
+[Unit]
+Description=OCI Shutdown Scripts
+After=local-fs.target network-online.target network.target rsyslog.service systemd-resolved.service
+After=sshd.service
+Wants=local-fs.target network-online.target network.target
+
+[Service]
+ExecStart=/bin/true
+ExecStop=/usr/bin/oci-metadata-scripts --script-type shutdown
+Type=oneshot
+RemainAfterExit=true
+TimeoutStopSec=0
+
+[Install]
+WantedBy=multi-user.target

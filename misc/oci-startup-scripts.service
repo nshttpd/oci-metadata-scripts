@@ -1,0 +1,12 @@
+[Unit]
+Description=OCI Startup Scripts
+After=local-fs.target network-online.target network.target rsyslog.service sshd.service
+Wants=local-fs.target network-online.target network.target
+
+[Service]
+ExecStart=/usr/bin/oci-metadata-scripts --script-type startup
+KillMode=process
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target
