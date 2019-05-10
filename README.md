@@ -1,3 +1,5 @@
+[![wercker status](https://app.wercker.com/status/56107a996689202ef859cc6a49d9fb5f/s/master "wercker status")](https://app.wercker.com/project/byKey/56107a996689202ef859cc6a49d9fb5f)
+
 ### OCI Metadata Script Handler
 
 #### Overview
