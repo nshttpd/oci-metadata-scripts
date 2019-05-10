@@ -1,0 +1,13 @@
+box: golang:1.12
+build:
+  steps:
+    - wercker/golint@1.4.1:
+        exclude: vendor
+    - script:
+        name: go test
+        code: |
+          go test -mod vendor ./...
+    - script:
+        name: go build
+        code: |
+          go build -mod vendor ./...
