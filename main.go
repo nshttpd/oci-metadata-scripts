@@ -18,6 +18,7 @@ const (
 	workShell = "/bin/bash"
 )
 
+// ScriptManager definition of the manager to handle the script management
 type ScriptManager struct {
 	Type       ScriptType
 	WorkDir    string
@@ -39,7 +40,7 @@ func main() {
 	st, err := ParseScriptType(scriptType)
 	if err != nil {
 		log.Error("No valid argument specified for script type")
-		log.Error("%s : %s", err, scriptType)
+		log.Errorf("%s : %s", err, scriptType)
 		os.Exit(1)
 	}
 
@@ -53,7 +54,7 @@ func main() {
 
 	defer func() {
 		if !debug {
-			os.RemoveAll(wd)
+			_ = os.RemoveAll(wd)
 		} else {
 			log.Debug("not removing work dir : ", wd)
 		}
