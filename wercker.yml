@@ -33,7 +33,7 @@ package:
         code: |
           export VERSION=`cat VERSION`
           fpm -s dir -t rpm -v ${VERSION} -n oci-metadata-scripts -p pkg/build \
-                      -C pkg --replaces oci-metadata-scripts --after-install /var/lib/oci/scripts/postinst.sh var/ usr/ etc/
+                      -C pkg --replaces oci-metadata-scripts --after-install pkg/var/lib/oci/scripts/postinst.sh var/ usr/ etc/
           fpm -s dir -t deb -v ${VERSION} -n oci-metadata-scripts -p pkg/build \
                       -C pkg --replaces oci-metadata-scripts --after-install pkg/var/lib/oci/scripts/postinst.sh var/ usr/ etc/
 deploy:
