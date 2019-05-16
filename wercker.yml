@@ -23,7 +23,7 @@ package:
     - script:
         name: copy files
         code: |
-          cp oci-metadata-scripts pkg/usr/bin/
+          cp build/oci-metadata-scripts pkg/usr/bin/
           cp misc/*.service pkg/etc/systemd/system/
           cp misc/postinst.sh pkg/var/lib/oci/scripts/
           chmod 744 pkg/var/lib/oci/scripts/postinst.sh
@@ -45,4 +45,4 @@ deploy:
         name: run ghr
         code: |
           export VERSION=`cat VERSION`
-          ghr -delete ${VERSION} pkg/build/
+          ghr -delete ${VERSION} package/pkg/build/
