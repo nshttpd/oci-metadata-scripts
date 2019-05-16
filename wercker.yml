@@ -31,18 +31,18 @@ package:
         name: fpm rpm builder
         code: |
           export VERSION=`cat VERSION`
-          fpm -s dir -t rpm -v ${VERSION} -n oci-metadata-scripts -p /tmp/build \
-                      -C /tmp/build --replaces oci-metadata-scripts --after-install /var/lib/oci/scripts/postinst.sh var/ usr/ etc/
-          fpm -s dir -t deb -v ${VERSION} -n oci-metadata-scripts -p /tmp/build \
-                      -C /tmp/build --replaces oci-metadata-scripts --after-install /var/lib/oci/scripts/postinst.sh var/ usr/ etc/
-#deploy:
-#  steps:
-#    - script:
-#        name: install ghr
-#        code: |
-#          go get github.com/tcnksm/ghr
-#    - script:
-#        name: run ghr
-#        code: |
-#          export VERSION=`cat VERSION`
-#          ghr -delete ${VERSION} pkg/
+          fpm -s dir -t rpm -v ${VERSION} -n oci-metadata-scripts -p pkg/build \
+                      -C pkg/build --replaces oci-metadata-scripts --after-install /var/lib/oci/scripts/postinst.sh var/ usr/ etc/
+          fpm -s dir -t deb -v ${VERSION} -n oci-metadata-scripts -p pkg/build \
+                      -C pkg/build --replaces oci-metadata-scripts --after-install /var/lib/oci/scripts/postinst.sh var/ usr/ etc/
+deploy:
+  steps:
+    - script:
+        name: install ghr
+        code: |
+          go get github.com/tcnksm/ghr
+    - script:
+        name: run ghr
+        code: |
+          export VERSION=`cat VERSION`
+          ghr -delete ${VERSION} pkg/build/
