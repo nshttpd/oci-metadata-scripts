@@ -10,7 +10,9 @@ build:
     - script:
         name: go build
         code: |
-          go build -mod vendor ./...
+          pwd
+          go build -mod vendor -o oci-metadata-scripts .
+          ls
 package:
   box: nshttpd/fpm-packager:0a62ec4
   steps:
@@ -23,6 +25,8 @@ package:
     - script:
         name: copy files
         code: |
+          pwd
+          ls
           cp build/oci-metadata-scripts pkg/usr/bin/
           cp misc/*.service pkg/etc/systemd/system/
           cp misc/postinst.sh pkg/var/lib/oci/scripts/
@@ -35,14 +39,18 @@ package:
                       -C pkg/build --replaces oci-metadata-scripts --after-install /var/lib/oci/scripts/postinst.sh var/ usr/ etc/
           fpm -s dir -t deb -v ${VERSION} -n oci-metadata-scripts -p pkg/build \
                       -C pkg/build --replaces oci-metadata-scripts --after-install /var/lib/oci/scripts/postinst.sh var/ usr/ etc/
-deploy:
-  steps:
-    - script:
-        name: install ghr
-        code: |
-          go get github.com/tcnksm/ghr
-    - script:
-        name: run ghr
-        code: |
-          export VERSION=`cat VERSION`
-          ghr -delete ${VERSION} package/pkg/build/
+#deploy:
+#  steps:
+#    - script:
+#        name: install ghr
+#        code: |
+#          go get github.com/tcnksm/ghr
+#    - tcnksm/ghr:
+#        name: run ghr
+#        code: |
+#          export VERSION=`cat VERSION`
+#          ghr -delete ${VERSION} package/pkg/build/
+#token: $GITHUB_TOKEN
+#  input: $WERCKER_SOURCE_DIR/dist
+#  version: latest
+#  replace: true
