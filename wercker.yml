@@ -11,3 +11,38 @@ build:
         name: go build
         code: |
           go build -mod vendor ./...
+package:
+  box: nshttpd/fpm-packager:0a62ec4
+  steps:
+    - script:
+        name: make directories
+        code: |
+          mkdir -p pkg/usr/bin
+          mkdir -p pkg/etc/systemd/system
+          mkdir -p pkg/var/lib/oci/scripts
+    - script:
+        name: copy files
+        code: |
+          cp oci-metadata-scripts pkg/usr/bin/
+          cp misc/*.service pkg/etc/systemd/system/
+          cp misc/postinst.sh pkg/var/lib/oci/scripts/
+          chmod 744 pkg/var/lib/oci/scripts/postinst.sh
+    - script:
+        name: fpm rpm builder
+        code: |
+          export VERSION=`cat VERSION`
+          fpm -s dir -t rpm -v ${VERSION} -n oci-metadata-scripts -p /tmp/build \
+                      -C /tmp/build --replaces oci-metadata-scripts --after-install /var/lib/oci/scripts/postinst.sh var/ usr/ etc/
+          fpm -s dir -t deb -v ${VERSION} -n oci-metadata-scripts -p /tmp/build \
+                      -C /tmp/build --replaces oci-metadata-scripts --after-install /var/lib/oci/scripts/postinst.sh var/ usr/ etc/
+#deploy:
+#  steps:
+#    - script:
+#        name: install ghr
+#        code: |
+#          go get github.com/tcnksm/ghr
+#    - script:
+#        name: run ghr
+#        code: |
+#          export VERSION=`cat VERSION`
+#          ghr -delete ${VERSION} pkg/
