@@ -46,4 +46,5 @@ deploy:
         name: run ghr
         token: $GITHUB_TOKEN
         input: pkg/build
+        version: $VERSION
         replace: true
