@@ -1,0 +1,50 @@
+box: golang:1.12
+build:
+  steps:
+    - wercker/golint@1.4.1:
+        exclude: vendor
+    - script:
+        name: go test
+        code: |
+          go test -mod vendor ./...
+    - script:
+        name: go build
+        code: |
+          go build -mod vendor -o oci-metadata-scripts .
+package:
+  box: nshttpd/fpm-packager:0a62ec4
+  steps:
+    - script:
+        name: make directories
+        code: |
+          mkdir -p pkg/usr/bin
+          mkdir -p pkg/etc/systemd/system
+          mkdir -p pkg/var/lib/oci/scripts
+          mkdir -p pkg/build
+    - script:
+        name: copy files
+        code: |
+          cp oci-metadata-scripts pkg/usr/bin/
+          cp misc/*.service pkg/etc/systemd/system/
+          cp misc/postinst.sh pkg/var/lib/oci/scripts/
+          chmod 744 pkg/var/lib/oci/scripts/postinst.sh
+    - script:
+        name: fpm rpm builder
+        code: |
+          export VERSION=`cat VERSION`
+          fpm -s dir -t rpm -v ${VERSION} -n oci-metadata-scripts -p pkg/build \
+                      -C pkg --replaces oci-metadata-scripts --after-install pkg/var/lib/oci/scripts/postinst.sh var/ usr/ etc/
+          fpm -s dir -t deb -v ${VERSION} -n oci-metadata-scripts -p pkg/build \
+                      -C pkg --replaces oci-metadata-scripts --after-install pkg/var/lib/oci/scripts/postinst.sh var/ usr/ etc/
+deploy:
+  steps:
+    - script:
+        name: set version
+        code: |
+          export VERSION=`cat VERSION`
+    - tcnksm/ghr@0.2.0:
+        name: run ghr
+        token: $GITHUB_TOKEN
+        input: pkg/build
+        version: $VERSION
+        replace: true

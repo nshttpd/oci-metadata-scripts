@@ -10,6 +10,7 @@ import (
 
 const defaultShell = "/bin/bash"
 
+// RunScript runs the script that has been fetched as requested
 func (sm *ScriptManager) RunScript(sn string) error {
 
 	s := fmt.Sprintf("%s/%s", sm.WorkDir, sn)

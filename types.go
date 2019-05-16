@@ -2,8 +2,10 @@ package main
 
 import "fmt"
 
+// ScriptType of what type of script it is
 type ScriptType int
 
+// Startup / Shutdown constant for that of a startup script
 const (
 	Startup ScriptType = iota + 1
 	Shutdown
@@ -22,6 +24,7 @@ func (t ScriptType) String() string {
 	return types[t-1]
 }
 
+// ParseScriptType will take the type of script string and map to the ScriptType constant
 func ParseScriptType(s string) (ScriptType, error) {
 	var ret ScriptType
 	switch s {
@@ -42,6 +45,7 @@ func ParseScriptType(s string) (ScriptType, error) {
 
 }
 
+// Startup will return true if it's time for a startup script
 func (t ScriptType) Startup() bool {
 	if t == Startup {
 		return true
@@ -49,6 +53,7 @@ func (t ScriptType) Startup() bool {
 	return false
 }
 
+// Shutdown will return true if it's shutdown script time
 func (t ScriptType) Shutdown() bool {
 	if t == Shutdown {
 		return true
